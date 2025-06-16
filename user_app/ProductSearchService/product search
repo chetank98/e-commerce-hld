@@ -1,0 +1,20 @@
+GET - /search
+
+FUNCTION searchProducts(request):
+    keyword = request.query.keyword            // search term entered by user
+    category = request.query.category           // optional filter by category
+    brand = request.query.brand                  // optional filter by brand
+    min_price = request.query.min_price          // optional filter minimum price
+    max_price = request.query.max_price          // optional filter maximum price
+    limit = request.query.limit OR 10             // number of results per page (default 10)
+    offset = request.query.offset OR 0             // pagination offset (default 0)
+
+
+
+    response = {
+        count: total_count,
+        products: []
+    }
+
+
+    RETURN HTTP 200 WITH response

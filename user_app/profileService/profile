@@ -1,0 +1,53 @@
+POST -  profile/:userId
+
+FUNCTION updateUserProfile(user_id, request):
+    EXTRACT name, email, phone_number, DOB, address, pincode, user_image_id FROM request
+
+    If !EXISTS {
+        RETURN ERROR
+    }
+
+        RETURN HTTP 200 WITH message "Profile updated successfully"
+    ELSE:
+        RETURN HTTP 400 WITH error "Invalid request"
+
+
+GET - profile/:userId
+
+FUNCTION getUserProfile(user_id):
+
+        RETURN HTTP 200 WITH {
+            user_id: user.id,
+            user_image_url: image_url.path,
+            name: user.name,
+            email: user.email,
+            phone_number: user.phone_number,
+            DOB: user.dob,
+            addresses: addresses
+        }
+    ELSE:
+        RETURN HTTP 404 WITH error "User not found"
+
+
+POST - profile/:userId/address
+
+FUNCTION addUserAddress(user_id, request):
+    EXTRACT address, pincode FROM request
+
+        KAFKA.publish(topic="email", message="New address added")
+        KAFKA.publish(topic="push", message="New address added")
+
+        RETURN HTTP 200 WITH message "Address added successfully"
+    ELSE:
+        RETURN HTTP 400 WITH error "Invalid address input"
+
+
+GET - profile/:userId/address
+
+
+FUNCTION getUserAddresses(user_id):
+
+    IF USER EXISTS & ADDRESS_EXISTS
+        RETURN HTTP 200 WITH addresses
+    ELSE:
+        RETURN HTTP 400 WITH error "Invalid user ID"

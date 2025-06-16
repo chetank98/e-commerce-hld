@@ -1,0 +1,36 @@
+GET - /products
+
+FUNCTION getProducts(request):
+    // Extract filters
+    category = request.query.category        // e.g. "electronics"
+    brand = request.query.brand              // e.g. "samsung"
+    min_price = request.query.min_price      // e.g. 100
+    max_price = request.query.max_price      // e.g. 1000
+    sort = request.query.sort                // "asc" or "desc"
+    limit = request.query.limit              // e.g. 10
+    offset = request.query.offset            // e.g. 0
+
+
+
+    RETURN HTTP 200 WITH {
+        count: total_count,
+        products: [
+            {
+                product_id,
+                product_name,
+                product_image,
+                price
+            }
+        ]
+    }
+
+
+GET - product/productId
+
+FUNCTION getProductDetails(productId):
+    product = QUERY product WHERE id = productId AND archived_at IS NULL
+
+    IF product EXISTS:
+       RETURN HTTP 200 WITH PRODUCT DETAILS
+    ELSE:
+        RETURN HTTP 404 WITH "Product not found"

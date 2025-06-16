@@ -1,0 +1,93 @@
+POST - cart/:user_id
+
+FUNCTION addToCart(user_id, request):
+    product_id = request.product_id
+    quantity = request.quantity
+
+    IF user EXISTS(user_id) AND product EXISTS(product_id):
+        price = GET price FROM products WHERE id = product_id
+
+        IF cart EXISTS for user_id:
+            cart_id = user's existing cart ID
+        ELSE:
+            cart_id = CREATE new cart FOR user_id
+
+        IF product EXISTS in cart_items (cart_id, product_id):
+            UPDATE cart_items SET quantity = quantity + request.quantity WHERE cart_id AND product_id
+        ELSE:
+            INSERT INTO cart_items (cart_id, product_id, quantity, price)
+
+        RETURN HTTP 200 WITH message "Product added to cart"
+
+        KAFKA.PUBLISH("ADD TO CART")
+    ELSE:
+        RETURN HTTP 400 WITH message "Invalid user or product"
+
+
+
+
+GET - cart/:user_id
+
+FUNCTION getCart(user_id):
+    IF user EXISTS(user_id):
+        cart_id = GET cart ID WHERE user_id = user_id
+        items = GET cart_items WHERE cart_id = cart_id
+
+        total_price = 0
+        FOR item IN items:
+            product = GET product_name FROM products WHERE id = item.product_id
+            item.product_name = product
+            item.total = item.quantity * item.price
+            total_price += item.total
+
+        RETURN HTTP 200 WITH {
+            cart_id,
+            total_price,
+            items: [ { product_id, product_name, quantity, price, total } ]
+        }
+    ELSE:
+        RETURN HTTP 404 "User not found"
+
+
+
+
+
+PUT - cart/:user_id
+
+FUNCTION updateCartItem(user_id, request):
+    product_id = request.product_id
+    quantity = request.quantity
+
+    cart_id = GET cart ID WHERE user_id = user_id
+
+    IF cart_item EXISTS(cart_id, product_id):
+        UPDATE cart_items SET quantity = request.quantity WHERE cart_id AND product_id
+
+        RETURN HTTP 200 WITH message "Cart item updated"
+    ELSE:
+        RETURN HTTP 404 WITH message "Item not found in cart"
+
+
+
+
+DELETE - cart/:user_id/item/:product_id
+FUNCTION deleteCartItem(user_id, product_id):
+    cart_id = GET cart ID WHERE user_id = user_id
+
+    IF cart_item EXISTS(cart_id, product_id):
+        DELETE FROM cart_items WHERE cart_id AND product_id
+
+        RETURN HTTP 200 "Item removed from cart"
+    ELSE:
+        RETURN HTTP 404 "Item not found in cart"
+
+
+
+DELETE - cart/:user_id
+
+FUNCTION clearCart(user_id):
+    cart_id = GET cart ID WHERE user_id = user_id
+
+    DELETE FROM cart_items WHERE cart_id = cart_id
+
+    RETURN HTTP 200 "Cart cleared"
