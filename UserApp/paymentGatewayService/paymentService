@@ -11,6 +11,11 @@ POST user/payment/initialize
                 SAVE AFTER THE RESPONSE OF PAYMENT
             }
 
+             IF payment == done {
+             KAFKA.PUBLISH ("ORDER_CONFIRM")
+                    PAYMENT, NOTIFICATION , INVENTORY_REDUCED,
+            }
+            
 GET user/payment/details
     FUNCTION (req, res)
             EXTRACT DETAILS FROM user_id,order_id

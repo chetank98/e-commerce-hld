@@ -9,9 +9,6 @@ FUNCTION createOrder(user_id, request):
             message: "Order placed successfully"
         }
 
-        KAFKA.PUBLISH ("ORDER_CONFIRM")
-        PAYMENT, NOTIFICATION , INVENTORY_REDUCED,
-
     ELSE:
         RETURN HTTP 400 WITH "Invalid user or cart"
 
