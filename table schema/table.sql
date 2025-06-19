@@ -1,5 +1,5 @@
 
-CREATE TYPE upload_type_enum AS ENUM ('user_profile', 'product_image', 'product_video');
+CREATE TYPE upload_type_enum AS ENUM ('user_profile', 'product_image', 'product_video','admin_profile');
 CREATE TYPE order_status_enum AS ENUM ('confirm', 'pending', 'paid');
 CREATE TYPE notification_type_enum AS ENUM ('email', 'sms');
 CREATE TYPE user_role_enum AS ENUM ('user', 'admin');
@@ -121,12 +121,3 @@ CREATE TABLE session (
     archived_at TIMESTAMP
 );
 
-
-CREATE TABLE notification_tracker (
-    id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id),
-    type notification_type_enum,
-    message TEXT,
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);

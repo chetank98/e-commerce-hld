@@ -11,6 +11,5 @@
 * Order Service
 * Payment gateway service
 * Inventory Service
-* Delivery Service
 * Notification Service
 
