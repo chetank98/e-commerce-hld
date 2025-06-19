@@ -1,6 +1,6 @@
 # E-Commerce Application High level design
 
-## Services -
+## Services 
 
 * Auth Service
 * Profile Service
@@ -10,6 +10,7 @@
 * Cart Service
 * Order Service
 * Payment gateway service
-* Inventory Service 
+* Inventory Service
+* Delivery Service
 * Notification Service
 

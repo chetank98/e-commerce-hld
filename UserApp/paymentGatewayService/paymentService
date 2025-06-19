@@ -1,0 +1,28 @@
+POST user/payment/initialize
+
+    FUNCTION (req, res)
+            EXTRACT DETAILS FROM user_id,order_id
+
+            IF PAYMENT METHOD == "COD" {
+                DIRECTLY SAVE THE PAYEMNT DETAILS WITH METHOD COD AND STATUS WILL CHANGE AFTER DELIVERY WHEN CASH RECEIVED
+                RESPONSE 200
+            }
+            ELSE {
+                SAVE AFTER THE RESPONSE OF PAYMENT
+            }
+
+GET user/payment/details
+    FUNCTION (req, res)
+            EXTRACT DETAILS FROM user_id,order_id
+
+            response {
+                order details with payment status and method
+            }
+
+PUT user/payment/status
+
+    FUNCTION (req, res)
+
+         req - user_id,order_id in payment details
+
+        Update status of cod after delivery

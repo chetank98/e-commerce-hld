@@ -1,0 +1,89 @@
+Post - /sign-up
+Description - User sign-up with email or phone number with password \
+
+        # Request:
+        {
+          "email": "user@example.com",    # OR
+          "phone": "+1234567890",
+          "password": "securePassword123"
+        }
+
+        FUNCTION signUp(request):
+            EXTRACT email OR phone FROM request
+            EXTRACT password FROM request
+
+            IF valid(email OR phone) AND valid(password):
+                CREATE user WITH email/phone AND password
+                GENERATE JWT token
+
+                TRIGGER NotificationService
+
+                IF email EXISTS:
+                    SEND Kafka message TO topic "email" WITH type = "welcome"
+                ELSE IF phone EXISTS:
+                    SEND Kafka message TO topic "SMS" WITH type = "welcome"
+
+                RETURN HTTP 200 WITH JWT token
+            ELSE:
+                RETURN HTTP 400 WITH error message
+
+
+POST - /login
+Description - User logout with email or phone number with password \
+
+            # Request:
+            {
+              "email": "user@example.com",    # OR
+              "phone": "+1234567890",
+              "password": "securePassword123"
+            }
+
+            FUNCTION login(request):
+                EXTRACT email OR phone FROM request
+                EXTRACT password FROM request
+
+                IF credentials ARE valid:
+                    GENERATE JWT token
+
+                    TRIGGER NotificationService
+
+                    IF email EXISTS:
+                        SEND Kafka message TO topic "email" WITH type = "login alert"
+                    ELSE IF phone EXISTS:
+                        SEND Kafka message TO topic "SMS" WITH type = "login alert"
+
+                    RETURN HTTP 200 WITH JWT token
+                ELSE:
+                    RETURN HTTP 401 WITH error message
+
+
+POST - /logout
+Description - user will be logout and session will be archived
+
+        # No request body; uses authenticated context
+
+        FUNCTION logout(context):
+            EXTRACT userId FROM context
+
+            ARCHIVE user session
+
+            RETURN HTTP 200 WITH message "Logged out successfully"
+
+
+POST - /refresh-token
+Description - refresh token will be generated \
+
+        # Request:
+        {
+          "token": "refreshTokenValue"
+        }
+
+        FUNCTION refreshToken(request):
+            EXTRACT refreshToken FROM request
+
+            IF refreshToken IS valid:
+                GENERATE new accessToken
+                RETURN HTTP 200 WITH accessToken
+            ELSE:
+                RETURN HTTP 401 WITH error message
+

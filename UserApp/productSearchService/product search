@@ -18,3 +18,7 @@ FUNCTION searchProducts(request):
 
 
     RETURN HTTP 200 WITH response
+
+    ELSE
+        RETURN ERROR "No Product Found"
+

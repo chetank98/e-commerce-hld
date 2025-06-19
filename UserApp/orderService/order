@@ -4,10 +4,6 @@ FUNCTION createOrder(user_id, request):
     EXTRACT cart_id, address_id, payment_method FROM request
 
 
-        DECREASE inventory FOR item.product_id BY item.quantity
-
-        IF ORDER_STATUS == "PAID"
-
         RETURN HTTP 200 WITH {
             order_id: new_order_id,
             message: "Order placed successfully"

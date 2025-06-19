@@ -1,0 +1,34 @@
+POST - admin/inventory
+
+FUNCTION createInventory(user_id, request):
+    EXTRACT product_name,product_image,product_price,quantity,etc FROM request
+
+    INSERT QUERY TO INSERT THE PRODUCT DETAILS
+
+    RETURN RESPONSE AFTER SUCCESSFUL ENTRY
+
+    IF err FOUND
+        RETURN HTTP 500
+
+GET - admin/inventory
+
+FUNCTION getInventory (req, resp)
+
+    get all products
+    with filters like products sold, stock
+
+    response {
+        http 200 with
+        all the products details with products
+    }
+
+    IF err FOUND {
+        return http 500 with products details
+    }
+
+
+GET - admin/inventory/:productId
+
+FUNCTION getInventoryDetailsById
+
+

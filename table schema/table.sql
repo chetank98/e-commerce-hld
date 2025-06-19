@@ -2,6 +2,7 @@
 CREATE TYPE upload_type_enum AS ENUM ('user_profile', 'product_image', 'product_video');
 CREATE TYPE order_status_enum AS ENUM ('confirm', 'pending', 'paid');
 CREATE TYPE notification_type_enum AS ENUM ('email', 'sms');
+CREATE TYPE user_role_enum AS ENUM ('user', 'admin');
 
 
 CREATE TABLE users (
@@ -12,6 +13,7 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE,
     password TEXT,
     dob DATE,
+    role user_role_enum DEFAULT 'user',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     archived_at TIMESTAMP
@@ -64,7 +66,6 @@ CREATE TABLE inventory (
 CREATE TABLE cart (
      id SERIAL PRIMARY KEY,
      user_id INT REFERENCES users(id),
-     cart_session_id UUID,
      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
      updated_at TIMESTAMP,
      archived_at TIMESTAMP
