@@ -23,12 +23,38 @@ FUNCTION getInventory (req, resp)
     }
 
     IF err FOUND {
-        return http 500 with products details
+        return http 500
     }
 
 
 GET - admin/inventory/:productId
 
-FUNCTION getInventoryDetailsById
+FUNCTION getInventoryDetailsById (req, res)
+
+        get Product Details
+
+        response {
+            available {
+                total_left_count,
+                total_sold_count,
+                product_details []
+            }
+        }
+
+PUT - admin/inventory/:productId
+this is to increase the inventory
+
+FUNCTION updateInventoryCount
+
+       REQUEST = (product_quantity, description , images_id, product_name )
+
+        response {
+                http 200
+            }
+
+            IF err FOUND {
+                return http 500
+            }
+
 
 
