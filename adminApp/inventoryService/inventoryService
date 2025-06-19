@@ -41,7 +41,7 @@ FUNCTION getInventoryDetailsById (req, res)
             }
         }
 
-PUT - admin/inventory/:productId
+PUT -
 this is to increase the inventory
 
 FUNCTION updateInventoryCount
@@ -55,6 +55,21 @@ FUNCTION updateInventoryCount
             IF err FOUND {
                 return http 500
             }
+
+
+DELETE - admin/inventory/:productId
+
+FUNCTION deleteProduct
+
+    req - productId
+
+           response {
+                    http 200
+                }
+
+                IF err FOUND {
+                    return http 500
+                }
 
 
 
